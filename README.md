@@ -10,6 +10,10 @@ Click on the green button "Clone or download", open the "dist" folder and then r
 
 In order to run this application you need to have [Java](https://java.com/en/download/) installed on your PC.
 
-## Usage warning
+## Usage information
 
-Please mind the usage of this application as there is currently no option to undo the change.
+Button for removing leading numbers with dot is now implemented.
+
+```
+0123.filename.ext => filename.ext
+```
