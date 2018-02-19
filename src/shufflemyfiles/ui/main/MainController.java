@@ -6,6 +6,9 @@ import shufflemyfiles.filesrandomize.FilesRandomize;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -91,6 +94,17 @@ public class MainController implements Initializable {
         alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void trimNumbers(ActionEvent event) {
+        try {
+            loadFiles();
+            filesRandomize.trimPrefixFromList();
+            showMessage(AlertType.INFORMATION, "Files should be without leadin number.");
+        } catch (IOException ex) {
+            showMessage(AlertType.ERROR, "Error: \n" + ex.getMessage());
+        }
     }
 
 }

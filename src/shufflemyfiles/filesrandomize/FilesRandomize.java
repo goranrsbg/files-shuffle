@@ -104,6 +104,17 @@ public class FilesRandomize {
             newName.setLength(0);
         }
     }
+    /**
+     * Removes leading numbers and dots form file name.
+     * 0123.filename.ext => filename.ext
+     * @throws IOException 
+     */
+    public void trimPrefixFromList() throws IOException {
+        for (File listOfFile : listOfFiles) {
+            Path source = listOfFile.toPath();
+            Files.move(source, source.resolveSibling(trimPrefixNumber(listOfFile.getName())));
+        }
+    }
     
     /**
      * Removes all leading numbers and dots from file name if there are any.
