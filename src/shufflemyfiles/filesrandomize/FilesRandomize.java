@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -26,11 +27,16 @@ public class FilesRandomize {
      * Contains all prefixes for the shuffle files.
      */
     private int[] listOfNumbers;
+    /**
+     * Matches leading numbers that ends with single dot
+     */
+    private final Pattern prefixPattern;
     
     private final Random rnd;
 
     public FilesRandomize() {
         rnd = new Random();
+        prefixPattern = Pattern.compile("^\\d+\\.");
     }
 
     /**
@@ -117,13 +123,16 @@ public class FilesRandomize {
     }
     
     /**
-     * Removes all leading numbers and dots from file name if there are any.
+     * Removes leading number that ends with single dot from file name if there is any.
+     * 123.filename.ext => filename.ext
+     * 0123.123.filename.ext => 123.filename.ext
+     * .filename.ext => .filename.ext
      * 
      * @param name File name from listOfFiles
      * @return Trimmed file name.
      */
     private String trimPrefixNumber(String name) {
-        return name.replaceFirst("^[0-9[\\.]]+", "");
+        return name.replaceFirst(prefixPattern.pattern(), "");
     }
 
 }

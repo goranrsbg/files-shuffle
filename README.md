@@ -4,7 +4,7 @@ This application alters the order of files when sorted by name by adding a numbe
 
 ## Getting started
 
-Click on the green button "Clone or download", open the "dist" folder and then run ShuffleMyFiles.jar.
+Click on the green button "Clone or download" -> Download ZIP, open the "dist" folder and then run ShuffleMyFiles.jar.
 
 ## Prerequisites
 
@@ -16,4 +16,13 @@ Button for removing leading numbers with dot is now implemented.
 
 ```
 0123.filename.ext => filename.ext
+```
+
+v.0.4.2 Pattern that matches prefix number now correctly detects it.
+
+```
+012.12.filename.ext => 12.filename.ext
+012..filename.ext => .filename.ext
+.filename.ext => .filename.ext
+012filename.ext => 012filename.ext
 ```
