@@ -2,7 +2,7 @@
 
 This application alters the order of files when sorted by name by adding a number in front of each file name. The primary aim of this application is to shuffle .mp3 files in a folder.
 
-![alt text](https://github.com/goranrsbg/files-shuffle/logo/shufflemyfiles.png "Shuffle My Files)
+![shufflemyfiles](https://user-images.githubusercontent.com/17111166/36937259-e87aa61e-1f10-11e8-853b-fa496c67b9f5.png)
 
 ## Getting started
 
