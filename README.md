@@ -6,7 +6,7 @@ This application alters the order of files when sorted by name by adding a numbe
 
 ## Getting started
 
-Click on the green button "Clone or download" -> Download ZIP, open the "dist" folder and then run ShuffleMyFiles.jar.
+Click on the green button "Clone or download" -> Download ZIP, open the "binaries" folder and then run ShuffleMyFiles.jar.
 
 ## Prerequisites
 
