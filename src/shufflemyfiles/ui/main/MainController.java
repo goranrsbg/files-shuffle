@@ -6,15 +6,19 @@ import shufflemyfiles.filesrandomize.FilesRandomize;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -36,17 +40,31 @@ public class MainController implements Initializable {
     private Label dirPathLabel;
     @FXML
     private Label messageLabel;
+    @FXML
+    private Button btBrowse;
+    @FXML
+    private Button btShuffle;
+    @FXML
+    private Button btTrim;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         filesRandomize = new FilesRandomize();
         primaryStage = ShuffleMyFiles.getStage();
         currentDirectory = new File(System.getProperty("user.home"));
+        Platform.runLater(() -> {
+            ObservableMap<KeyCombination, Runnable> accelerators = primaryStage.getScene().getAccelerators();
+            accelerators.put(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_ANY), () -> {
+                btBrowse.fire();
+            });
+            accelerators.put(new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_ANY), () -> {
+                btShuffle.fire();
+            });
+            accelerators.put(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_ANY), () -> {
+                btTrim.fire();
+            });
+        });
         updatePathText(loadFiles());
-    }
-
-    public void setStage(Stage stage) {
-        primaryStage = stage;
     }
 
     @FXML
@@ -100,8 +118,8 @@ public class MainController implements Initializable {
     private void trimNumbers(ActionEvent event) {
         try {
             loadFiles();
-            filesRandomize.trimPrefixFromList();
-            showMessage(AlertType.INFORMATION, "Files should be without leadin number.");
+            int nfiles = filesRandomize.trimPrefixFromList();
+            showMessage(AlertType.INFORMATION, nfiles + " files affected.");
         } catch (IOException ex) {
             showMessage(AlertType.ERROR, "Error: \n" + ex.getMessage());
         }

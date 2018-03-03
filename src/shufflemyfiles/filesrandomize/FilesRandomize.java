@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -31,7 +32,7 @@ public class FilesRandomize {
      * Matches leading numbers that ends with single dot
      */
     private final Pattern prefixPattern;
-    
+
     private final Random rnd;
 
     public FilesRandomize() {
@@ -40,13 +41,14 @@ public class FilesRandomize {
     }
 
     /**
-     * Reads all files from current file directory. 
-     * Name of the FileSorter.jar is excluded.
+     * Reads all files from current file directory. Name of the FileSorter.jar
+     * is excluded.
+     *
      * @param dir
-     * @return number of files to be shuffled 
+     * @return number of files to be shuffled
      */
     public int loadFiles(File dir) {
-        if(dir == null) {
+        if (dir == null) {
             return -1;
         }
         listOfFiles = dir.listFiles((pathName) -> {
@@ -54,17 +56,16 @@ public class FilesRandomize {
         });
         return listOfFiles.length;
     }
-    
+
     public int getNumberOfFIles() {
         return listOfFiles.length;
     }
 
     /**
-     * First creates listOfnumbers as listOfFiles.length size.
-     * Then filles created listOfNumbers with numbers from 1 to length.
-     * Then each field in listOfNumbers swaps value from 
-     * random.nexInt(current index + 1).
-     * The list is shuffled after.
+     * First creates listOfnumbers as listOfFiles.length size. Then filles
+     * created listOfNumbers with numbers from 1 to length. Then each field in
+     * listOfNumbers swaps value from random.nexInt(current index + 1). The list
+     * is shuffled after.
      */
     public void generateRandomNumerList() {
         if (listOfFiles != null && listOfFiles.length > 1) {
@@ -81,9 +82,10 @@ public class FilesRandomize {
             }
         }
     }
+
     /**
      * Swaps list elements at indexes i and j.
-     * 
+     *
      * @param i list index
      * @param j list index
      */
@@ -95,9 +97,9 @@ public class FilesRandomize {
     }
 
     /**
-     * Changes file name of each file in listOfFiles as
-     * listOfNumbers[i] + '.' + listOfFiles[i].getName()
-     * Numbers are with leading zero.
+     * Changes file name of each file in listOfFiles as listOfNumbers[i] + '.' +
+     * listOfFiles[i].getName() Numbers are with leading zero.
+     *
      * @throws java.io.IOException
      */
     public void mergeLists() throws IOException {
@@ -110,24 +112,33 @@ public class FilesRandomize {
             newName.setLength(0);
         }
     }
+
     /**
-     * Removes leading numbers and dots form file name.
-     * 0123.filename.ext => filename.ext
-     * @throws IOException 
+     * Removes leading numbers and dots form file name. 0123.filename.ext =>
+     * filename.ext
+     *
+     * @return Number of changed files.
+     * @throws IOException
      */
-    public void trimPrefixFromList() throws IOException {
-        for (File listOfFile : listOfFiles) {
-            Path source = listOfFile.toPath();
-            Files.move(source, source.resolveSibling(trimPrefixNumber(listOfFile.getName())));
+    public int trimPrefixFromList() throws IOException {
+        int affected = 0;
+        Matcher matcher; 
+        for (File file : listOfFiles) {
+            Path source = file.toPath();
+            matcher = prefixPattern.matcher(file.getName());
+            if (matcher.find()) {
+                Files.move(source, source.resolveSibling(trimPrefixNumber(file.getName())));
+                affected++;
+            }
         }
+        return affected;
     }
-    
+
     /**
-     * Removes leading number that ends with single dot from file name if there is any.
-     * 123.filename.ext => filename.ext
-     * 0123.123.filename.ext => 123.filename.ext
-     * .filename.ext => .filename.ext
-     * 
+     * Removes leading number that ends with single dot from file name if there
+     * is any. 123.filename.ext => filename.ext 0123.123.filename.ext =>
+     * 123.filename.ext .filename.ext => .filename.ext
+     *
      * @param name File name from listOfFiles
      * @return Trimmed file name.
      */
